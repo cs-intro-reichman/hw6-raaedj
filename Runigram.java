@@ -113,79 +113,95 @@ public class Runigram {
 	// Computes the luminance of the RGB values of the given pixel, using the formula 
 	// lum = 0.299 * r + 0.587 * g + 0.114 * b, and returns a Color object consisting
 	// the three values r = lum, g = lum, b = lum.
-	private static Color luminance(Color pixel) {
-		int r = pixel.getRed();
-		int g = pixel.getGreen();
-		int b = pixel.getBlue();
-	
-		int lum = (int) Math.round(0.299 * r + 0.587 * g + 0.114 * b);
-	
-		return new Color(lum, lum, lum);
-	}
-	
-	/**
-	 * Returns an image which is the grayscaled version of the given image.
-	 */
-	/**
- * Returns an image which is the grayscale version of the given image.
- * Each pixel in the new image has all components (r, g, b) equal to its luminance value.
- */
-public static Color[][] grayScaled(Color[][] image) {
-    int numRows = image.length;
-    int numCols = image[0].length;
+	  // Computes the luminance of the RGB values of the given pixel.
+	  private static Color luminance(Color pixel) {
+        int r = pixel.getRed();
+        int g = pixel.getGreen();
+        int b = pixel.getBlue();
 
-    Color[][] grayImage = new Color[numRows][numCols];
+        int lum = (int) Math.round(0.299 * r + 0.587 * g + 0.114 * b);
 
-    for (int i = 0; i < numRows; i++) {
-        for (int j = 0; j < numCols; j++) {
-            grayImage[i][j] = luminance(image[i][j]);
-        }
+        return new Color(lum, lum, lum);
     }
 
-    return grayImage;
-}
-	
-	
-	/**
-	 * Returns an image which is the scaled version of the given image. 
-	 * The image is scaled (resized) to have the given width and height.
-	 */
-	public static Color[][] scaled(Color[][] image, int width, int height) {
-		//// Replace the following statement with your code
-		return null;
-	}
-	
-	/**
-	 * Computes and returns a blended color which is a linear combination of the two given
-	 * colors. Each r, g, b, value v in the returned color is calculated using the formula 
-	 * v = alpha * v1 + (1 - alpha) * v2, where v1 and v2 are the corresponding r, g, b
-	 * values in the two input color.
-	 */
-	public static Color blend(Color c1, Color c2, double alpha) {
-		//// Replace the following statement with your code
-		return null;
-	}
-	
-	/**
-	 * Cosntructs and returns an image which is the blending of the two given images.
-	 * The blended image is the linear combination of (alpha) part of the first image
-	 * and (1 - alpha) part the second image.
-	 * The two images must have the same dimensions.
-	 */
-	public static Color[][] blend(Color[][] image1, Color[][] image2, double alpha) {
-		//// Replace the following statement with your code
-		return null;
-	}
+    /** Returns an image which is the grayscale version of the given image. */
+    public static Color[][] grayScaled(Color[][] image) {
+        int numRows = image.length;
+        int numCols = image[0].length;
 
-	/**
-	 * Morphs the source image into the target image, gradually, in n steps.
-	 * Animates the morphing process by displaying the morphed image in each step.
-	 * Before starting the process, scales the target image to the dimensions
-	 * of the source image.
-	 */
-	public static void morph(Color[][] source, Color[][] target, int n) {
-		//// Replace this comment with your code
-	}
+        Color[][] grayImage = new Color[numRows][numCols];
+
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+                grayImage[i][j] = luminance(image[i][j]);
+            }
+        }
+
+        return grayImage;
+    }
+
+    /** Returns an image which is the scaled version of the given image. */
+    public static Color[][] scaled(Color[][] image, int width, int height) {
+        int numRows = image.length;
+        int numCols = image[0].length;
+        Color[][] newImg = new Color[height][width];
+
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                // Map the new (i, j) to the old image's (x, y)
+                int x = j * numCols / width;
+                int y = i * numRows / height;
+                newImg[i][j] = image[y][x];
+            }
+        }
+
+        return newImg;
+    }
+
+    /** Computes and returns a blended color which is a linear combination of the two given colors. */
+    public static Color blend(Color c1, Color c2, double alpha) {
+        int r = (int) (alpha * c1.getRed() + (1 - alpha) * c2.getRed());
+        int g = (int) (alpha * c1.getGreen() + (1 - alpha) * c2.getGreen());
+        int b = (int) (alpha * c1.getBlue() + (1 - alpha) * c2.getBlue());
+        return new Color(r, g, b);
+    }
+
+    /** Constructs and returns an image which is the blending of the two given images. */
+    public static Color[][] blend(Color[][] image1, Color[][] image2, double alpha) {
+        int numRows = image1.length;
+        int numCols = image1[0].length;
+        Color[][] blendedImage = new Color[numRows][numCols];
+
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+                blendedImage[i][j] = blend(image1[i][j], image2[i][j], alpha);
+            }
+        }
+
+        return blendedImage;
+    }
+
+    /** Morphs the source image into the target image, gradually, in n steps. */
+    public static void morph(Color[][] source, Color[][] target, int n) {
+        int numRows = source.length;
+        int numCols = source[0].length;
+        for (int step = 0; step < n; step++) {
+            Color[][] morphedImage = new Color[numRows][numCols];
+            double alpha = step / (double) (n - 1); // Linear interpolation
+
+            for (int i = 0; i < numRows; i++) {
+                for (int j = 0; j < numCols; j++) {
+                    morphedImage[i][j] = blend(source[i][j], target[i][j], alpha);
+                }
+            }
+            display(morphedImage);
+            try {
+                Thread.sleep(100); // Add a slight delay between frames to visualize the morph
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 	
 	/** Creates a canvas for the given image. */
 	public static void setCanvas(Color[][] image) {
