@@ -96,26 +96,55 @@ public class Runigram {
 	/**
 	 * Returns an image which is the vertically flipped version of the given image. 
 	 */
-	public static Color[][] flippedVertically(Color[][] image){
-		//// Replace the following statement with your code
-		return null;
+	public static Color[][] flippedVertically(Color[][] image) {
+		int numRows = image.length;
+		int numCols = image[0].length;
+		Color[][] newImg = new Color[numRows][numCols];
+	
+		for (int i = 0; i < numRows; i++) { 
+			for (int j = 0; j < numCols; j++) { 
+				newImg[i][j] = image[numRows - 1 - i][j];
+			}
+		}
+	
+		return newImg;
 	}
 	
 	// Computes the luminance of the RGB values of the given pixel, using the formula 
 	// lum = 0.299 * r + 0.587 * g + 0.114 * b, and returns a Color object consisting
 	// the three values r = lum, g = lum, b = lum.
 	private static Color luminance(Color pixel) {
-		//// Replace the following statement with your code
-		return null;
+		int r = pixel.getRed();
+		int g = pixel.getGreen();
+		int b = pixel.getBlue();
+	
+		int lum = (int) Math.round(0.299 * r + 0.587 * g + 0.114 * b);
+	
+		return new Color(lum, lum, lum);
 	}
 	
 	/**
 	 * Returns an image which is the grayscaled version of the given image.
 	 */
-	public static Color[][] grayScaled(Color[][] image) {
-		//// Replace the following statement with your code
-		return null;
-	}	
+	/**
+ * Returns an image which is the grayscale version of the given image.
+ * Each pixel in the new image has all components (r, g, b) equal to its luminance value.
+ */
+public static Color[][] grayScaled(Color[][] image) {
+    int numRows = image.length;
+    int numCols = image[0].length;
+
+    Color[][] grayImage = new Color[numRows][numCols];
+
+    for (int i = 0; i < numRows; i++) {
+        for (int j = 0; j < numCols; j++) {
+            grayImage[i][j] = luminance(image[i][j]);
+        }
+    }
+
+    return grayImage;
+}
+	
 	
 	/**
 	 * Returns an image which is the scaled version of the given image. 
