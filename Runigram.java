@@ -28,20 +28,30 @@ public class Runigram {
 	 * stored in the given PPM file. */
 	public static Color[][] read(String fileName) {
 		In in = new In(fileName);
-		// Reads the file header, ignoring the first and the third lines.
+	
+		// Read the PPM header
 		in.readString();
 		int numCols = in.readInt();
-		int numRows = in.readInt();
-		in.readInt();
-		// Creates the image array
+		int numRows = in.readInt(); 
+		in.readInt(); 
+	
+		// Create the 2D array to store the image
 		Color[][] image = new Color[numRows][numCols];
-		// Reads the RGB values from the file into the image array. 
-		// For each pixel (i,j), reads 3 values from the file,
-		// creates from the 3 colors a new Color object, and 
-		// makes pixel (i,j) refer to that object.
-		//// Replace the following statement with your code.
-		return null;
+	
+		// Read pixel data into the array
+		for (int i = 0; i < numRows; i++) { 
+			for (int j = 0; j < numCols; j++) { 
+				int r = in.readInt();
+				int g = in.readInt(); 
+				int b = in.readInt();
+	
+				image[i][j] = new Color(r, g, b);
+			}
+		}
+	
+		return image;
 	}
+	
 
     // Prints the RGB values of a given color.
 	private static void print(Color c) {
@@ -58,82 +68,136 @@ public class Runigram {
 	// For example, to check that some image processing function works correctly,
 	// we can apply the function and then use this function to print the resulting image.
 	private static void print(Color[][] image) {
-		//// Replace this comment with your code
-		//// Notice that all you have to so is print every element (i,j) of the array using the print(Color) function.
+		for (int i = 0; i < image.length; i++) {
+			for (int j = 0; j < image[i].length; j++) {
+				print(image[i][j]);
+			}
+			System.out.println();
+		}
 	}
 	
 	/**
 	 * Returns an image which is the horizontally flipped version of the given image. 
 	 */
 	public static Color[][] flippedHorizontally(Color[][] image) {
-		//// Replace the following statement with your code
-		return null;
+		int numRows = image.length;
+		int numCols = image[0].length;
+		Color[][] newImg = new Color[numRows][numCols];
+	
+		for (int i = 0; i < numRows; i++) {
+			for (int j = 0; j < numCols; j++) { 
+				newImg[i][j] = image[i][numCols - 1 - j];
+			}
+		}
+	
+		return newImg;
 	}
 	
 	/**
 	 * Returns an image which is the vertically flipped version of the given image. 
 	 */
-	public static Color[][] flippedVertically(Color[][] image){
-		//// Replace the following statement with your code
-		return null;
+	public static Color[][] flippedVertically(Color[][] image) {
+		int numRows = image.length;
+		int numCols = image[0].length;
+		Color[][] newImg = new Color[numRows][numCols];
+	
+		for (int i = 0; i < numRows; i++) { 
+			for (int j = 0; j < numCols; j++) { 
+				newImg[i][j] = image[numRows - 1 - i][j];
+			}
+		}
+	
+		return newImg;
 	}
 	
 	// Computes the luminance of the RGB values of the given pixel, using the formula 
 	// lum = 0.299 * r + 0.587 * g + 0.114 * b, and returns a Color object consisting
 	// the three values r = lum, g = lum, b = lum.
-	private static Color luminance(Color pixel) {
-		//// Replace the following statement with your code
-		return null;
-	}
-	
-	/**
-	 * Returns an image which is the grayscaled version of the given image.
-	 */
-	public static Color[][] grayScaled(Color[][] image) {
-		//// Replace the following statement with your code
-		return null;
-	}	
-	
-	/**
-	 * Returns an image which is the scaled version of the given image. 
-	 * The image is scaled (resized) to have the given width and height.
-	 */
-	public static Color[][] scaled(Color[][] image, int width, int height) {
-		//// Replace the following statement with your code
-		return null;
-	}
-	
-	/**
-	 * Computes and returns a blended color which is a linear combination of the two given
-	 * colors. Each r, g, b, value v in the returned color is calculated using the formula 
-	 * v = alpha * v1 + (1 - alpha) * v2, where v1 and v2 are the corresponding r, g, b
-	 * values in the two input color.
-	 */
-	public static Color blend(Color c1, Color c2, double alpha) {
-		//// Replace the following statement with your code
-		return null;
-	}
-	
-	/**
-	 * Cosntructs and returns an image which is the blending of the two given images.
-	 * The blended image is the linear combination of (alpha) part of the first image
-	 * and (1 - alpha) part the second image.
-	 * The two images must have the same dimensions.
-	 */
-	public static Color[][] blend(Color[][] image1, Color[][] image2, double alpha) {
-		//// Replace the following statement with your code
-		return null;
-	}
+	  // Computes the luminance of the RGB values of the given pixel.
+	  private static Color luminance(Color pixel) { 
+		int r = pixel.getRed(); 
+		int g = pixel.getGreen(); 
+		int b = pixel.getBlue(); 
+		int lum = (int) (0.299 * r + 0.587 * g + 0.114 * b); // Return the greyscale color 
+		return new Color(lum, lum, lum); }
 
-	/**
-	 * Morphs the source image into the target image, gradually, in n steps.
-	 * Animates the morphing process by displaying the morphed image in each step.
-	 * Before starting the process, scales the target image to the dimensions
-	 * of the source image.
-	 */
-	public static void morph(Color[][] source, Color[][] target, int n) {
-		//// Replace this comment with your code
-	}
+    /** Returns an image which is the grayscale version of the given image. */
+    public static Color[][] grayScaled(Color[][] image) {
+        int numRows = image.length;
+        int numCols = image[0].length;
+
+        Color[][] grayImage = new Color[numRows][numCols];
+
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+                grayImage[i][j] = luminance(image[i][j]);
+            }
+        }
+
+        return grayImage;
+    }
+    /** Returns an image which is the scaled version of the given image. */
+    public static Color[][] scaled(Color[][] image, int width, int height) {
+        int numRows = image.length;
+        int numCols = image[0].length;
+        Color[][] newImg = new Color[height][width];
+
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                // Map the new (i, j) to the old image's (x, y)
+                int x = j * numCols / width;
+                int y = i * numRows / height;
+                newImg[i][j] = image[y][x];
+            }
+        }
+
+        return newImg;
+    }
+
+    /** Computes and returns a blended color which is a linear combination of the two given colors. */
+    public static Color blend(Color c1, Color c2, double alpha) {
+        int r = (int) (alpha * c1.getRed() + (1 - alpha) * c2.getRed());
+        int g = (int) (alpha * c1.getGreen() + (1 - alpha) * c2.getGreen());
+        int b = (int) (alpha * c1.getBlue() + (1 - alpha) * c2.getBlue());
+        return new Color(r, g, b);
+    }
+
+    /** Constructs and returns an image which is the blending of the two given images. */
+    public static Color[][] blend(Color[][] image1, Color[][] image2, double alpha) {
+        int numRows = image1.length;
+        int numCols = image1[0].length;
+        Color[][] blendedImage = new Color[numRows][numCols];
+
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+                blendedImage[i][j] = blend(image1[i][j], image2[i][j], alpha);
+            }
+        }
+
+        return blendedImage;
+    }
+
+    /** Morphs the source image into the target image, gradually, in n steps. */
+    public static void morph(Color[][] source, Color[][] target, int n) {
+        int numRows = source.length;
+        int numCols = source[0].length;
+        for (int step = 0; step < n; step++) {
+            Color[][] morphedImage = new Color[numRows][numCols];
+            double alpha = step / (double) (n - 1); // Linear interpolation
+
+            for (int i = 0; i < numRows; i++) {
+                for (int j = 0; j < numCols; j++) {
+                    morphedImage[i][j] = blend(source[i][j], target[i][j], alpha);
+                }
+            }
+            display(morphedImage);
+            try {
+                Thread.sleep(100); // Add a slight delay between frames to visualize the morph
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 	
 	/** Creates a canvas for the given image. */
 	public static void setCanvas(Color[][] image) {
