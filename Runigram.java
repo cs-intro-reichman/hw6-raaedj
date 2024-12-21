@@ -58,15 +58,22 @@ public class Runigram {
 	// For example, to check that some image processing function works correctly,
 	// we can apply the function and then use this function to print the resulting image.
 	private static void print(Color[][] image) {
-		//// Replace this comment with your code
-		//// Notice that all you have to so is print every element (i,j) of the array using the print(Color) function.
+		for(int i = 0; i < image.length; i++){
+				print(image);
+		}
 	}
 	
 	/**
 	 * Returns an image which is the horizontally flipped version of the given image. 
 	 */
 	public static Color[][] flippedHorizontally(Color[][] image) {
-		//// Replace the following statement with your code
+		Color[][] newImg = new Color[image.length][image[0].length];
+		for(int i = image.length - 1; i >= 0; i--){
+			int x = 0;
+			for(int j = 0; j < image[0].length; j++){
+				newImg[x++][j] = image[i][j];
+			}
+		}
 		return null;
 	}
 	
