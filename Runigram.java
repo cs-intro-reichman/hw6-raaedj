@@ -114,18 +114,12 @@ public class Runigram {
 	// lum = 0.299 * r + 0.587 * g + 0.114 * b, and returns a Color object consisting
 	// the three values r = lum, g = lum, b = lum.
 	  // Computes the luminance of the RGB values of the given pixel.
-	  private static Color luminance(Color pixel) {
-        int r = pixel.getRed();
-        int g = pixel.getGreen();
-        int b = pixel.getBlue();
-
-        int lum = (int) Math.round(0.299 * r + 0.587 * g + 0.114 * b);
-
-        // Ensure luminance is within the valid color range [0, 255]
-        lum = Math.max(0, Math.min(255, lum));
-
-        return new Color(lum, lum, lum);
-    }
+	  private static Color luminance(Color pixel) { 
+		int r = pixel.getRed(); 
+		int g = pixel.getGreen(); 
+		int b = pixel.getBlue(); 
+		int lum = (int) (0.299 * r + 0.587 * g + 0.114 * b); // Return the greyscale color 
+		return new Color(lum, lum, lum); }
 
     /** Returns an image which is the grayscale version of the given image. */
     public static Color[][] grayScaled(Color[][] image) {
