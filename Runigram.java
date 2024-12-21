@@ -121,6 +121,9 @@ public class Runigram {
 
         int lum = (int) Math.round(0.299 * r + 0.587 * g + 0.114 * b);
 
+        // Ensure luminance is within the valid color range [0, 255]
+        lum = Math.max(0, Math.min(255, lum));
+
         return new Color(lum, lum, lum);
     }
 
@@ -139,7 +142,6 @@ public class Runigram {
 
         return grayImage;
     }
-
     /** Returns an image which is the scaled version of the given image. */
     public static Color[][] scaled(Color[][] image, int width, int height) {
         int numRows = image.length;
