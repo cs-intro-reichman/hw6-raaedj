@@ -74,7 +74,7 @@ public class Runigram {
 				newImg[x++][j] = image[i][j];
 			}
 		}
-		return null;
+		return newImg;
 	}
 	
 	/**
